@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -19,6 +20,9 @@
             android:layout_gravity="center"
             android:background="@drawable/style_searchbar"
             android:hint="Find note"
+            android:textColor="@color/black"
+
+
             android:textAlignment="center"
             android:textColorHint="#737373"
 
@@ -29,6 +33,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="9sp" />
+
+
+        <ImageView
+           android:translationY="-50sp"
+            android:translationX="320sp"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:src="@drawable/add_icon"
+            android:background="@drawable/style_add_btn"
+            />
+
 
     </LinearLayout>
 
