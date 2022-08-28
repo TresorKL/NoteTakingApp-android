@@ -19,7 +19,6 @@ public class Note {
         this.noteBackgroundColor = noteBackgroundColor;
     }
 
-
     public Note() {
     }
 
