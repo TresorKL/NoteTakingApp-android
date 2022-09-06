@@ -1,8 +1,15 @@
 package com.example.notetakingapp.backgroundtasks;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.notetakingapp.R;
+import com.example.notetakingapp.adapter.NoteAdapter;
 import com.example.notetakingapp.note.Note;
 import com.example.notetakingapp.processor.Processor;
 import com.google.gson.Gson;
@@ -24,9 +31,28 @@ import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class FetchNoteTask extends AsyncTask<String,String,String> {
+public class FetchNoteTask extends AsyncTask<String, String, String> {
 
-    public FetchNoteTask() {
+
+    RecyclerView noteRecycler;
+    Context context;
+
+    List<Note>noteList=new ArrayList<>();
+    public FetchNoteTask( RecyclerView noteRecycler, Context context) {
+
+        this.noteRecycler=noteRecycler;
+        this.context=context;
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+
+        int numberOfColumns = 3;
+        NoteAdapter noteAdapter = new NoteAdapter(noteList, context);
+        noteRecycler.setLayoutManager(new GridLayoutManager(context, numberOfColumns, GridLayoutManager.VERTICAL, false));
+        noteRecycler.setAdapter(noteAdapter);
+
+        super.onPostExecute(s);
     }
 
     @Override
@@ -34,37 +60,45 @@ public class FetchNoteTask extends AsyncTask<String,String,String> {
 
         try {
 
-            String allNotesApi="http://192.168.0.60:8080/notes/1";
+            int userId=2;
+            String allNotesApi = "http://192.168.0.60:8080/notes/"+userId;
             URL url = new URL(allNotesApi);
-            HttpURLConnection connection= (HttpURLConnection) url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.connect();
 
 
-
             // receive result
-            BufferedReader bf=new BufferedReader(new InputStreamReader(connection.getInputStream()));
-             String result = bf.readLine();
-
-           JSONArray jsonarray = new JSONArray(result);
-
+            BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String result = bf.readLine();
+            JSONArray jsonarray = new JSONArray(result);
             Processor processor = new Processor();
 
-            List<Note>noteList = processor.retrieveNotesList(jsonarray);
-            String noteString="";
-            for(int i=0;i<noteList.size();i++){
-                noteString=noteString+noteList.get(i).getTitle().concat(" --> ");
+            noteList = processor.retrieveNotesList(jsonarray);
+
+
+
+
+
+            String noteString = "";
+            for (int i = 0; i < noteList.size(); i++) {
+                noteString = noteString + noteList.get(i).getTitle().concat(" --> ");
             }
-            System.out.println("TITLES FOUND!!!!!!!!!!!!!: "+noteString);
+            System.out.println("TITLES FOUND!!!!!!!!!!!!!: " + noteString);
 
             System.out.println(jsonarray);
-        }catch (Exception ex){
-           // Log.d("EXCEPTION: ",ex.getMessage());
-          System.out.println("oops !!!!!!  "+ex);
+        } catch (Exception ex) {
+            // Log.d("EXCEPTION: ",ex.getMessage());
+            System.out.println("oops !!!!!!  " + ex);
         }
 
         return null;
     }
 
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
 
+        Toast.makeText(context, "LOADING NOTES", Toast.LENGTH_SHORT).show();
+    }
 }

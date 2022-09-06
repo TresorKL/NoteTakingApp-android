@@ -36,6 +36,7 @@
 
 
         <ImageView
+            android:id="@+id/addBtn"
            android:translationY="-50sp"
             android:translationX="320sp"
             android:layout_width="50sp"

@@ -11,16 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.notetakingapp.R;
+import com.example.notetakingapp.note.Note;
 
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
-    //List<Integer> noteList;
-    String[] noteList;
+     List<Note> noteList;
+
     Context context;
 
-    public NoteAdapter(String[] noteList, Context context) {
+    public NoteAdapter(List<Note> noteList, Context context) {
         this.noteList = noteList;
         this.context = context;
     }
@@ -34,20 +35,23 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.textView.setText(holder.textView.getText().toString()+ noteList[position]);
+        holder.title.setText(noteList.get(position).getTitle());
+        holder.noteBody.setText(noteList.get(position).getNoteBody());
     }
 
     @Override
     public int getItemCount() {
-        return noteList.length;
+        return noteList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView title;
+        TextView editedDate,noteBody;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.noteTile);
+            noteBody=itemView.findViewById(R.id.noteBody);
+            title = itemView.findViewById(R.id.noteTile);
         }
     }
 }
