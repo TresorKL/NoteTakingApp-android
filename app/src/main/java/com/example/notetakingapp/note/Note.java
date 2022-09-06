@@ -61,4 +61,15 @@ public class Note {
     public void setNoteBackgroundColor(String noteBackgroundColor) {
         this.noteBackgroundColor = noteBackgroundColor;
     }
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "id=" + id +
+                ", dateOfEdition=" + dateOfEdition +
+                ", title='" + title + '\'' +
+                ", noteBody='" + noteBody + '\'' +
+                ", noteBackgroundColor='" + noteBackgroundColor + '\'' +
+                '}';
+    }
 }
